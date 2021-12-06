@@ -29,7 +29,8 @@ public class Recipe {
         return description;
     }
 
-    public void addIngredient(String... ingredientsAdded) {
+    public void addIngredient(String ingredient, String... ingredientsAdded) {
+        ingredients.add(ingredient);
         for (int i = 0; i < ingredientsAdded.length; i++) {
             ingredients.add(ingredientsAdded[i]);
         }
