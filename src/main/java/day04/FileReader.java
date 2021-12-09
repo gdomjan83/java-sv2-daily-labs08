@@ -31,14 +31,6 @@ public class FileReader {
         return data;
     }
 
-    private int getMaxTemp(String line) {
-        return Integer.parseInt(line.substring(6, 8).trim());
-    }
-
-    private int getMinTemp(String line) {
-        return Integer.parseInt(line.substring(12, 14).trim());
-    }
-
     private int iterateDataAndFindSmallestDay(List<String> data) {
         int smallestSpread = Integer.MAX_VALUE;
         int day = 0;
@@ -50,6 +42,14 @@ public class FileReader {
             }
         }
         return day;
+    }
+
+    private int getMaxTemp(String line) {
+        return Integer.parseInt(line.substring(6, 8).trim());
+    }
+
+    private int getMinTemp(String line) {
+        return Integer.parseInt(line.substring(12, 14).trim());
     }
 }
 
