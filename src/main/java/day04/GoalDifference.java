@@ -37,7 +37,7 @@ public class GoalDifference {
         int smallestDifference = Integer.MAX_VALUE;
         int teamNumber = 0;
         for (int i = 0; i < data.size(); i++) {
-            int difference = getGoalsScored(data.get(i)) - getGoalsSuffered(data.get(i));
+            int difference = Math.abs(getGoalsScored(data.get(i)) - getGoalsSuffered(data.get(i)));
             if (difference < smallestDifference) {
                 smallestDifference = difference;
                 teamNumber = i;
@@ -48,7 +48,7 @@ public class GoalDifference {
 
 
     private int getGoalsSuffered(String line) {
-        return Integer.parseInt(line.substring(51, 53).trim());
+        return Integer.parseInt(line.substring(50, 52).trim());
     }
 
     private int getGoalsScored(String line) {
