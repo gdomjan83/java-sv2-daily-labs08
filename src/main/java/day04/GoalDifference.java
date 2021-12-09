@@ -54,9 +54,4 @@ public class GoalDifference {
     private int getGoalsScored(String line) {
         return Integer.parseInt(line.substring(43, 45).trim());
     }
-
-    public static void main(String[] args) {
-        System.out.println(new GoalDifference().findSmallestGoalDifference("football.dat"));;
-    }
 }
-
