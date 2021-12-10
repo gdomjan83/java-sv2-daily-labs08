@@ -15,11 +15,7 @@ public class LineData {
         return name;
     }
 
-    public int getValue1() {
-        return value1;
-    }
-
-    public int getValue2() {
-        return value2;
+    public int getDifference() {
+        return Math.abs(value1 - value2);
     }
 }

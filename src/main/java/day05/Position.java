@@ -9,11 +9,11 @@ public class Position {
         this.endPosition = endPosition;
     }
 
-    public int getStartPosition() {
-        return startPosition;
+    public String returnString(String line) {
+        return line.substring(startPosition, endPosition).trim();
     }
 
-    public int getEndPosition() {
-        return endPosition;
+    public int returnInt(String line) {
+        return Integer.parseInt(line.substring(startPosition, endPosition).trim());
     }
 }

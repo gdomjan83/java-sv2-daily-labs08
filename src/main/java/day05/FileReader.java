@@ -7,19 +7,24 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileReader {
+public abstract class FileReader {
 
-    public int findSmallestTemperatureSpread(String fileName) {
-        Path path = Paths.get("src/main/resources/" + fileName);
-        List<String> data = cleanWeatherData(importFile(path));
-        return findDay(data);
+    public String findSmallestDifference() {
+        Path path = Paths.get("src/main/resources/" + getFileName());
+        List<String> data = cleanData(importFile(path), getDisregardedLines());
+        List<LineData> extractedData = extractData(data, getNamePosition(), getValue1Position(), getValue2Position());
+        return getResultWithSmallestDifference(extractedData).getName();
     }
 
-    public String findSmallestGoalDifference(String fileName) {
-        Path path = Paths.get("src/main/resources/" + fileName);
-        List<String> data = cleanFootballData(importFile(path));
-        return findTeam(data);
-    }
+    public abstract String getFileName();
+
+    public abstract List<Integer> getDisregardedLines();
+
+    public abstract Position getNamePosition();
+
+    public abstract Position getValue1Position();
+
+    public abstract  Position getValue2Position();
 
     private List<String> importFile(Path path) {
         try {
@@ -29,52 +34,35 @@ public class FileReader {
         }
     }
 
-    private List<String> cleanWeatherData(List<String> rawData) {
+    private List<String> cleanData(List<String> rawData, List<Integer> disregardLines) {
         List<String> data = new ArrayList<>();
-        for (int i = 2; i < rawData.size() - 1; i++) {
-            data.add(rawData.get(i));
-        }
-        return data;
-    }
-
-    private List<String> cleanFootballData(List<String> rawData) {
-        List<String> data = new ArrayList<>();
-        for (int i = 1; i < rawData.size(); i++) {
-            if (rawData.get(i).charAt(3) != '-') {
+        for (int i = 0; i < rawData.size(); i++) {
+            if (!disregardLines.contains(i)) {
                 data.add(rawData.get(i));
             }
         }
         return data;
     }
 
-    private int findDay(List<String> data) {
-        int smallestSpread = Integer.MAX_VALUE;
-        int day = 0;
-        for (int i = 0; i < data.size(); i++) {
-            int spread = getValueFromString(data.get(i), 6, 8) - getValueFromString(data.get(i), 12, 14);
-            if (spread < smallestSpread) {
-                smallestSpread = spread;
-                day = i + 1;
-            }
+    private List<LineData> extractData(List<String> data, Position positionName, Position positionValue1, Position positionValue2) {
+        List<LineData> lineDataList = new ArrayList<>();
+        for (String line : data) {
+            String name = positionName.returnString(line);
+            int value1 = positionValue1.returnInt(line);
+            int value2 = positionValue2.returnInt(line);
+            lineDataList.add(new LineData(name, value1, value2));
         }
-        return day;
+        return lineDataList;
     }
 
-    private String findTeam(List<String> data) {
-        int smallestDifference = Integer.MAX_VALUE;
-        int teamNumber = 0;
-        for (int i = 0; i < data.size(); i++) {
-            int difference = Math.abs(getValueFromString(data.get(i), 43, 45) - getValueFromString(data.get(i), 50, 52));
-            if (difference < smallestDifference) {
-                smallestDifference = difference;
-                teamNumber = i;
+    private LineData getResultWithSmallestDifference(List<LineData> data) {
+        LineData result = data.get(0);
+        for (LineData actual : data) {
+            if (actual.getDifference() < result.getDifference()) {
+                result = actual;
             }
         }
-        return data.get(teamNumber).substring(7, 23).trim();
-    }
-
-    private int getValueFromString(String line, int startPositon, int endPosition) {
-        return Integer.parseInt(line.substring(startPositon, endPosition).trim());
+        return result;
     }
 }
 
